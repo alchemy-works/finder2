@@ -1,0 +1,2 @@
+rootProject.name = 'finder2'
+include('finder2')

@@ -1,0 +1,38 @@
+plugins {
+    id 'application'
+}
+
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.jetbrains:annotations:21.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'finder2.App'
+    }
+}
+
+application {
+    mainClass = 'finder2.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task buildNative(type: Exec) {
+    dependsOn jar
+
+    def javaHome = environment.get('JAVA_HOME')
+    def nativeImage = javaHome + '/bin/native-image'
+    commandLine nativeImage, '-jar', "$buildDir/libs/finder2.jar", "$buildDir/libs/finder2"
+}
